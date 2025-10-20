@@ -1,0 +1,21 @@
+services:
+  mongo:
+    image: mongo
+    container_name: assignment2_mongo_container
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
+    restart: always
+
+  app:
+    image: assignment2_flask_image
+    container_name: assignment_2_flask_container
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+    environment:
+      WAIT_HOSTS: mongo:27017
+    restart: always
