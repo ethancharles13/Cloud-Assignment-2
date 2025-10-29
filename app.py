@@ -1,4 +1,4 @@
-from flask import Flask, render_template,request,redirect,url_for # For flask implementation
+from flask import Flask, render_template,request,redirect,url_for, jsonify # For flask implementation
 from pymongo import MongoClient # Database connector
 from bson.objectid import ObjectId # For ObjectId to work
 from bson.errors import InvalidId # For catching InvalidId exception for ObjectId
@@ -14,6 +14,10 @@ app = Flask(__name__)
 title = "TODO with Flask"
 heading = "ToDo Reminder"
 #modify=ObjectId()
+
+@app.route("/healthz")
+def health():
+        return jsonify(status = "ok"), 200
 
 def redirect_url():
 	return request.args.get('next') or \
@@ -117,12 +121,15 @@ def search():
 
 @app.route("/about")
 def about():
-	return render_template('credits.html',t=title,h=heading)
+    return render_template('credits.html',t=title,h=heading)
 
 if __name__ == "__main__":
-	env = os.environ.get('FLASK_ENV', 'development')
-	port = int(os.environ.get('PORT', 5000))
-	debug = False if env == 'production' else True
-	app.run(debug=True)
-	app.run(port=port, debug=debug)
-	# Careful with the debug mode..
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
+    # Need to change this to run outside of debug mode
+    # env = os.environ.get('FLASK_ENV', 'development')
+	# port = int(os.environ.get('PORT', 5000))
+	# debug = False if env == 'production' else True
+	# app.run(debug=True)
+	# app.run(port=port, debug=debug)
+    # Careful with the debug mode..

@@ -1,0 +1,16 @@
+extraManifests: []
+
+serverFiles:
+  alerting_rules.yml:
+    groups:
+    - name: pod-liveness
+      interval: 30s
+      rules:
+      - alert: PodCrashLooping
+        expr: kube_pod_container_status_restarts_total{namespace="assignment2"} > 3
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Pod {{ $labels.pod }} is restarting frequently"
+          description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} has restarted more than 3 times in the last 5 minutes."
