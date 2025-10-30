@@ -7,7 +7,7 @@ serverFiles:
       interval: 30s
       rules:
       - alert: PodCrashLooping
-        expr: kube_pod_container_status_restarts_total{namespace="assignment2"} > 3
+        expr: rate(kube_pod_container_status_restarts_total{namespace="assignment2"}[5m]) > 3
         for: 5m
         labels:
           severity: critical
